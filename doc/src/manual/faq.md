@@ -562,10 +562,14 @@ julia> remotecall_fetch(anon_bar, 2)
 
 As you'll see if you try this, the result is
 
-```julia
-MethodError: no method matching foo(::Array{Float64,1})
+```jldoctest
+julia> foo(x::Vector{Real}) = 42
+foo (generic function with 1 method)
+
+julia> foo([1])
+ERROR: MethodError: no method matching foo(::Array{Int64,1})
 Closest candidates are:
-  foo(!Matched::Array{real,1})
+  foo(::Array{Real,1}) at REPL[1]:1
 ```
 
 This is because `Vector{Real}` is not a supertype of `Vector{Int}`! You'd probably solve this problem with
