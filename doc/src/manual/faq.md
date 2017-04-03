@@ -566,9 +566,9 @@ Closest candidates are:
   foo(!Matched::Array{real,1})
 ```
 
-This is because `Vector{Real}` is not a supertype of `Vector{Int}`! You'd probably solve this problem with something like `foo{T<:Real}(bar::Vector{T})`. The `T` is a wild card; you first specify that it must be a subtype of real, then allow the function to take any vector of that type.
+This is because `Vector{Real}` is not a supertype of `Vector{Int}`! You'd probably solve this problem with something like `foo{T<:Real}(bar::Vector{T})` (or the short form `foo(bar::Vector{<:Real})` if the static parameter `T` is not required). The `T` is a wild card; you first specify that it must be a subtype of real, then allow the function to take any vector of that type.
 
-Of course, this same issue goes for any composite type `Comp`, not just `Vector`. If `Comp` has an element declared of type `Y`, then another type `Comp2` with an element of type `X<:Y` is not a subtype of `Comp`. 
+Of course, this same issue goes for any composite type `Comp`, not just `Vector`. If `Comp` has an element declared of type `Y`, then another type `Comp2` with an element of type `X<:Y` is not a subtype of `Comp`.
 
 ## Packages and Modules
 
