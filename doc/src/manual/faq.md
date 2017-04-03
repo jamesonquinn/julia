@@ -555,20 +555,26 @@ julia> anon_bar  = ()->1
 julia> remotecall_fetch(anon_bar, 2)
 1
 ```
+
 ## Troubleshooting "method not matched" (parametric invariance, etc.)
 
-### Why doesn't it work to declare `function foo(bar::Vector{real}) 42 end` and then call `foo([1])`?
+### Why doesn't it work to declare `foo(bar::Vector{Real}) = 42` and then call `foo([1])`?
 
 As you'll see if you try this, the result is
+
 ```julia
 MethodError: no method matching foo(::Array{Float64,1})
 Closest candidates are:
   foo(!Matched::Array{real,1})
 ```
 
-This is because `Vector{Real}` is not a supertype of `Vector{Int}`! You'd probably solve this problem with something like `foo{T<:Real}(bar::Vector{T})` (or the short form `foo(bar::Vector{<:Real})` if the static parameter `T` is not required). The `T` is a wild card; you first specify that it must be a subtype of real, then allow the function to take any vector of that type.
+This is because `Vector{Real}` is not a supertype of `Vector{Int}`! You'd probably solve this problem with
+something like `foo(bar::Vector{T}) where {T<:Real}`. The `T` is a wild card; you first specify that it must
+be a subtype of real, then allow the function to take any vector of that type. If the static parameter `T`
+is not required, you can use the short form `foo(bar::Vector{<:Real})`.
 
-Of course, this same issue goes for any composite type `Comp`, not just `Vector`. If `Comp` has an element declared of type `Y`, then another type `Comp2` with an element of type `X<:Y` is not a subtype of `Comp`.
+Of course, this same issue goes for any composite type `Comp`, not just `Vector`. If `Comp` has an element
+declared of type `Y`, then another type `Comp2` with an element of type `X<:Y` is not a subtype of `Comp`.
 
 ## Packages and Modules
 
